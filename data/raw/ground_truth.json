@@ -1,0 +1,625 @@
+{
+ "people": {
+  "K": {
+   "name": "Vikram Rathod",
+   "role": "kingpin",
+   "city": "Mumbai"
+  },
+  "L1": {
+   "name": "Imran Sheikh",
+   "role": "lieutenant",
+   "city": "Mumbai"
+  },
+  "L2": {
+   "name": "Suresh Pillai",
+   "role": "lieutenant",
+   "city": "Hyderabad"
+  },
+  "F": {
+   "name": "Anita Desai",
+   "role": "financier",
+   "city": "Kolkata"
+  },
+  "M1": {
+   "name": "Rahul Das",
+   "role": "mule",
+   "city": "Kolkata"
+  },
+  "M2": {
+   "name": "Pinky Roy",
+   "role": "mule",
+   "city": "Kolkata"
+  },
+  "M3": {
+   "name": "Abdul Karim",
+   "role": "mule",
+   "city": "Kolkata"
+  },
+  "S1": {
+   "name": "Ramesh Yadav",
+   "role": "operative",
+   "city": "Mumbai"
+  },
+  "S2": {
+   "name": "Sunny Kamble",
+   "role": "operative",
+   "city": "Mumbai"
+  },
+  "S3": {
+   "name": "Venkat Rao",
+   "role": "operative",
+   "city": "Hyderabad"
+  },
+  "S4": {
+   "name": "Kiran Goud",
+   "role": "operative",
+   "city": "Hyderabad"
+  },
+  "C1": {
+   "name": "Mahesh Naik",
+   "role": "courier",
+   "city": "Hyderabad"
+  },
+  "CV01": {
+   "name": "Sneha Kulkarni",
+   "role": "civilian",
+   "city": "Mumbai"
+  },
+  "CV02": {
+   "name": "Deepak Verma",
+   "role": "civilian",
+   "city": "Mumbai"
+  },
+  "CV03": {
+   "name": "Meera Rathod",
+   "role": "civilian",
+   "city": "Mumbai"
+  },
+  "CV04": {
+   "name": "Ajay Shinde",
+   "role": "civilian",
+   "city": "Pune"
+  },
+  "CV05": {
+   "name": "Prakash Jadhav",
+   "role": "civilian",
+   "city": "Pune"
+  },
+  "CV06": {
+   "name": "Rohit Malhotra",
+   "role": "civilian",
+   "city": "Delhi"
+  },
+  "CV07": {
+   "name": "Sunita Arora",
+   "role": "civilian",
+   "city": "Delhi"
+  },
+  "CV08": {
+   "name": "Amit Kumar",
+   "role": "civilian",
+   "city": "Delhi"
+  },
+  "CV09": {
+   "name": "Amit Kumar",
+   "role": "civilian",
+   "city": "Kolkata"
+  },
+  "CV10": {
+   "name": "Farah Ali",
+   "role": "civilian",
+   "city": "Hyderabad"
+  },
+  "CV11": {
+   "name": "Gopal Mehta",
+   "role": "civilian",
+   "city": "Mumbai"
+  },
+  "CV12": {
+   "name": "Sneha Patil",
+   "role": "civilian",
+   "city": "Mumbai"
+  },
+  "CV13": {
+   "name": "Lakshmi Patil",
+   "role": "civilian",
+   "city": "Mumbai"
+  },
+  "CV14": {
+   "name": "Zoya Mehta",
+   "role": "civilian",
+   "city": "Mumbai"
+  },
+  "CV15": {
+   "name": "Meena Kulkarni",
+   "role": "civilian",
+   "city": "Mumbai"
+  },
+  "CV16": {
+   "name": "Imtiaz Deshmukh",
+   "role": "civilian",
+   "city": "Mumbai"
+  },
+  "CV17": {
+   "name": "Lata Kulkarni",
+   "role": "civilian",
+   "city": "Mumbai"
+  },
+  "CV18": {
+   "name": "Meena Gupta",
+   "role": "civilian",
+   "city": "Mumbai"
+  },
+  "CV19": {
+   "name": "Nisha Pawar",
+   "role": "civilian",
+   "city": "Mumbai"
+  },
+  "CV20": {
+   "name": "Bhavna Shah",
+   "role": "civilian",
+   "city": "Mumbai"
+  },
+  "CV21": {
+   "name": "Lakshmi Pawar",
+   "role": "civilian",
+   "city": "Mumbai"
+  },
+  "CV22": {
+   "name": "Farah Gupta",
+   "role": "civilian",
+   "city": "Mumbai"
+  },
+  "CV23": {
+   "name": "Rajesh Pawar",
+   "role": "civilian",
+   "city": "Mumbai"
+  },
+  "CV24": {
+   "name": "Nisha Shah",
+   "role": "civilian",
+   "city": "Mumbai"
+  },
+  "CV25": {
+   "name": "Rohan Shah",
+   "role": "civilian",
+   "city": "Mumbai"
+  },
+  "CV26": {
+   "name": "Vinod Shah",
+   "role": "civilian",
+   "city": "Mumbai"
+  },
+  "CV27": {
+   "name": "Shalini Mehta",
+   "role": "civilian",
+   "city": "Mumbai"
+  },
+  "CV28": {
+   "name": "Shalini Joshi",
+   "role": "civilian",
+   "city": "Mumbai"
+  },
+  "CV29": {
+   "name": "Manoj Pawar",
+   "role": "civilian",
+   "city": "Mumbai"
+  },
+  "CV30": {
+   "name": "Mohan Chowdary",
+   "role": "civilian",
+   "city": "Hyderabad"
+  },
+  "CV31": {
+   "name": "Rekha Sastry",
+   "role": "civilian",
+   "city": "Hyderabad"
+  },
+  "CV32": {
+   "name": "Kavita Naidu",
+   "role": "civilian",
+   "city": "Hyderabad"
+  },
+  "CV33": {
+   "name": "Bhavna Goud",
+   "role": "civilian",
+   "city": "Hyderabad"
+  },
+  "CV34": {
+   "name": "Shalini Reddy",
+   "role": "civilian",
+   "city": "Hyderabad"
+  },
+  "CV35": {
+   "name": "Prakash Chowdary",
+   "role": "civilian",
+   "city": "Hyderabad"
+  },
+  "CV36": {
+   "name": "Rajesh Reddy",
+   "role": "civilian",
+   "city": "Hyderabad"
+  },
+  "CV37": {
+   "name": "Arjun Varma",
+   "role": "civilian",
+   "city": "Hyderabad"
+  },
+  "CV38": {
+   "name": "Swati Chowdary",
+   "role": "civilian",
+   "city": "Hyderabad"
+  },
+  "CV39": {
+   "name": "Pooja Sastry",
+   "role": "civilian",
+   "city": "Hyderabad"
+  },
+  "CV40": {
+   "name": "Joseph Goud",
+   "role": "civilian",
+   "city": "Hyderabad"
+  },
+  "CV41": {
+   "name": "Sunita Chatterjee",
+   "role": "civilian",
+   "city": "Kolkata"
+  },
+  "CV42": {
+   "name": "Sanjay Bose",
+   "role": "civilian",
+   "city": "Kolkata"
+  },
+  "CV43": {
+   "name": "Rohan Mukherjee",
+   "role": "civilian",
+   "city": "Kolkata"
+  },
+  "CV44": {
+   "name": "Bhavna Banerjee",
+   "role": "civilian",
+   "city": "Kolkata"
+  },
+  "CV45": {
+   "name": "Tarun Ghosh",
+   "role": "civilian",
+   "city": "Kolkata"
+  },
+  "CV46": {
+   "name": "Ashok Dutta",
+   "role": "civilian",
+   "city": "Kolkata"
+  },
+  "CV47": {
+   "name": "Prakash Chatterjee",
+   "role": "civilian",
+   "city": "Kolkata"
+  },
+  "CV48": {
+   "name": "Sneha Banerjee",
+   "role": "civilian",
+   "city": "Kolkata"
+  },
+  "CV49": {
+   "name": "Uma Ghosh",
+   "role": "civilian",
+   "city": "Kolkata"
+  },
+  "CV50": {
+   "name": "Ritu Bose",
+   "role": "civilian",
+   "city": "Kolkata"
+  },
+  "CV51": {
+   "name": "Ritu Sen",
+   "role": "civilian",
+   "city": "Kolkata"
+  },
+  "CV52": {
+   "name": "Rekha More",
+   "role": "civilian",
+   "city": "Pune"
+  },
+  "CV53": {
+   "name": "Sanjay Jadhav",
+   "role": "civilian",
+   "city": "Pune"
+  },
+  "CV54": {
+   "name": "Shalini Shinde",
+   "role": "civilian",
+   "city": "Pune"
+  },
+  "CV55": {
+   "name": "Gopal Kale",
+   "role": "civilian",
+   "city": "Pune"
+  },
+  "CV56": {
+   "name": "Lakshmi Gaikwad",
+   "role": "civilian",
+   "city": "Pune"
+  },
+  "CV57": {
+   "name": "Rohan Jadhav",
+   "role": "civilian",
+   "city": "Pune"
+  },
+  "CV58": {
+   "name": "Lakshmi Shinde",
+   "role": "civilian",
+   "city": "Pune"
+  },
+  "CV59": {
+   "name": "Swati Jadhav",
+   "role": "civilian",
+   "city": "Pune"
+  },
+  "CV60": {
+   "name": "Nisha Chopra",
+   "role": "civilian",
+   "city": "Delhi"
+  },
+  "CV61": {
+   "name": "Sameer Kapoor",
+   "role": "civilian",
+   "city": "Delhi"
+  },
+  "CV62": {
+   "name": "Ashok Malhotra",
+   "role": "civilian",
+   "city": "Delhi"
+  },
+  "CV63": {
+   "name": "Rajesh Chopra",
+   "role": "civilian",
+   "city": "Delhi"
+  },
+  "CV64": {
+   "name": "Manoj Chopra",
+   "role": "civilian",
+   "city": "Delhi"
+  },
+  "CV65": {
+   "name": "Sanjay Arora",
+   "role": "civilian",
+   "city": "Delhi"
+  },
+  "CV66": {
+   "name": "Gopal Chopra",
+   "role": "civilian",
+   "city": "Delhi"
+  }
+ },
+ "syndicate": [
+  "K",
+  "L1",
+  "L2",
+  "F",
+  "M1",
+  "M2",
+  "M3",
+  "S1",
+  "S2",
+  "S3",
+  "S4",
+  "C1"
+ ],
+ "kingpin": "K",
+ "decoy": "CV02",
+ "burners": [
+  "7004512390",
+  "7004598812"
+ ],
+ "records": {
+  "sub:9810045671": "K",
+  "sub:9820011457": "L1",
+  "sub:9848022316": "L2",
+  "sub:9830033874": "F",
+  "sub:9831140021": "M1",
+  "sub:9831140588": "M2",
+  "sub:9831177203": "M3",
+  "sub:9867012345": "S1",
+  "sub:9867054321": "S2",
+  "sub:9849011223": "S3",
+  "sub:9849033445": "S4",
+  "sub:9849077889": "C1",
+  "sub:6496003088": "CV01",
+  "sub:7072316318": "CV02",
+  "sub:9995318006": "CV03",
+  "sub:9139622346": "CV04",
+  "sub:9351431869": "CV05",
+  "sub:9484050267": "CV06",
+  "sub:8266621452": "CV07",
+  "sub:7698701093": "CV08",
+  "sub:7208961666": "CV09",
+  "sub:8876150038": "CV10",
+  "sub:6468798866": "CV11",
+  "sub:7386961002": "CV12",
+  "sub:6034412322": "CV13",
+  "sub:8577264792": "CV14",
+  "sub:8857963235": "CV15",
+  "sub:9333098529": "CV16",
+  "sub:8571741758": "CV17",
+  "sub:8021539485": "CV18",
+  "sub:9312358181": "CV19",
+  "sub:9671081852": "CV20",
+  "sub:7230360324": "CV21",
+  "sub:8638330138": "CV22",
+  "sub:7636584845": "CV23",
+  "sub:7766946235": "CV24",
+  "sub:6616372700": "CV25",
+  "sub:7495847992": "CV26",
+  "sub:7192442344": "CV27",
+  "sub:8428882648": "CV28",
+  "sub:8588371786": "CV29",
+  "sub:7132189713": "CV30",
+  "sub:6812796452": "CV31",
+  "sub:9545948229": "CV32",
+  "sub:6935145090": "CV33",
+  "sub:9978430986": "CV34",
+  "sub:8271663058": "CV35",
+  "sub:8401306667": "CV36",
+  "sub:9821126711": "CV37",
+  "sub:8113412681": "CV38",
+  "sub:6921464031": "CV39",
+  "sub:9476591851": "CV40",
+  "sub:6060230750": "CV41",
+  "sub:6285485566": "CV42",
+  "sub:6528549312": "CV43",
+  "sub:9765971715": "CV44",
+  "sub:8847260192": "CV45",
+  "sub:7724410511": "CV46",
+  "sub:7936514833": "CV47",
+  "sub:6902649171": "CV48",
+  "sub:9823136991": "CV49",
+  "sub:9410404949": "CV50",
+  "sub:9739640748": "CV51",
+  "sub:7074631961": "CV52",
+  "sub:9360674820": "CV53",
+  "sub:8476370951": "CV54",
+  "sub:9585560155": "CV55",
+  "sub:7764726831": "CV56",
+  "sub:9764855574": "CV57",
+  "sub:8142046855": "CV58",
+  "sub:9304507530": "CV59",
+  "sub:6588194644": "CV60",
+  "sub:6844577242": "CV61",
+  "sub:6827074179": "CV62",
+  "sub:9947623232": "CV63",
+  "sub:6986657615": "CV64",
+  "sub:9293416788": "CV65",
+  "sub:7397218820": "CV66",
+  "sub:7004512390": "K",
+  "sub:7004598812": "K",
+  "kyc:16697175938534": "K",
+  "kyc:148019703822": "L1",
+  "kyc:415179958636": "L2",
+  "kyc:59986583155": "F",
+  "kyc:47217572138": "M1",
+  "kyc:414016348709": "M2",
+  "kyc:80665567524": "M3",
+  "kyc:601480727714": "S1",
+  "kyc:82335818407874": "S2",
+  "kyc:015757904844": "S3",
+  "kyc:107890518231": "S4",
+  "kyc:753211154295": "C1",
+  "kyc:33832929085062": "CV01",
+  "kyc:576800311518": "CV02",
+  "kyc:170664246675": "CV03",
+  "kyc:23696280536": "CV04",
+  "kyc:96345598670": "CV05",
+  "kyc:16820763608": "CV06",
+  "kyc:666254920888": "CV07",
+  "kyc:40611209311": "CV08",
+  "kyc:960208021525": "CV09",
+  "kyc:30772712996637": "CV10",
+  "kyc:95680803961756": "CV11",
+  "kyc:300778124855": "CV12",
+  "kyc:811725051990": "CV13",
+  "kyc:64051639805": "CV14",
+  "kyc:202026173680": "CV15",
+  "kyc:514920619979": "CV16",
+  "kyc:563945591712": "CV17",
+  "kyc:28674000238": "CV18",
+  "kyc:113760334460": "CV19",
+  "kyc:31294288044099": "CV20",
+  "kyc:580766361856": "CV21",
+  "kyc:685522391725": "CV22",
+  "kyc:434747518498": "CV23",
+  "kyc:80489995376470": "CV24",
+  "kyc:657077091493": "CV25",
+  "kyc:485802105682": "CV26",
+  "kyc:062923933765": "CV27",
+  "kyc:96047532021552": "CV28",
+  "kyc:01330742531032": "CV29",
+  "kyc:882372450442": "CV30",
+  "kyc:12204158493": "CV31",
+  "kyc:29853982184": "CV32",
+  "kyc:68444042696476": "CV33",
+  "kyc:59551949899": "CV34",
+  "kyc:66305299171281": "CV35",
+  "kyc:105632692063": "CV36",
+  "kyc:88711467865953": "CV37",
+  "kyc:31462344115476": "CV38",
+  "kyc:05254862001517": "CV39",
+  "kyc:153890538521": "CV40",
+  "kyc:837316630027": "CV41",
+  "kyc:85126147125881": "CV42",
+  "kyc:728060733100": "CV43",
+  "kyc:92463237044": "CV44",
+  "kyc:12905380400": "CV45",
+  "kyc:384029000809": "CV46",
+  "kyc:10831602797943": "CV47",
+  "kyc:035823944022": "CV48",
+  "kyc:56326741844432": "CV49",
+  "kyc:753560466999": "CV50",
+  "kyc:91844750916595": "CV51",
+  "kyc:71729756595": "CV52",
+  "kyc:69784461716225": "CV53",
+  "kyc:554027444246": "CV54",
+  "kyc:40341330589686": "CV55",
+  "kyc:64143664771": "CV56",
+  "kyc:70651597391": "CV57",
+  "kyc:897419094597": "CV58",
+  "kyc:75103452071": "CV59",
+  "kyc:76807484454976": "CV60",
+  "kyc:268445234456": "CV61",
+  "kyc:57976567461": "CV62",
+  "kyc:343682483531": "CV63",
+  "kyc:70453730223052": "CV64",
+  "kyc:67333235418853": "CV65",
+  "kyc:26312570414": "CV66",
+  "kyc:382374666229": "K",
+  "kycsig:13040003896285": "F",
+  "kycsig:74651326853": "F",
+  "rto:TS09EK4521": "L2",
+  "rto:AP28CX9911": "C1",
+  "rto:MH02AB7777": "L1",
+  "rto:WB05CD4351": "CV41",
+  "rto:MH21KA4205": "CV21",
+  "rto:MH18FG8077": "CV03",
+  "rto:DL29FE6362": "CV66",
+  "rto:MH27AH4430": "CV52",
+  "rto:WB09GH6408": "CV50",
+  "rto:MH20FC6643": "CV25",
+  "rto:DL20HB9787": "CV06",
+  "rto:MH04BG5866": "CV55",
+  "rto:MH16GC5228": "CV56",
+  "rto:WB04EK1970": "CV43",
+  "rto:DL15DJ2999": "CV62",
+  "rto:MH29CA4172": "CV29",
+  "rto:DL21EA6210": "CV60",
+  "soc:@bhaijaan_mumbai": "L1",
+  "soc:@sp_hyd": "L2",
+  "soc:@rammy_007": "S1",
+  "soc:@chinna_hyd": "S3",
+  "soc:@sunita_arora59": "CV07",
+  "soc:@rajesh_reddy43": "CV36",
+  "soc:@lakshmi_shinde63": "CV58",
+  "soc:@rohan_shah37": "CV25",
+  "soc:@sneha_banerjee39": "CV48",
+  "soc:@sneha_kulkarni12": "CV01",
+  "soc:@farah_gupta14": "CV22",
+  "soc:@rajesh_chopra98": "CV63",
+  "soc:@lakshmi_pawar73": "CV21",
+  "soc:@rohit_malhotra41": "CV06",
+  "soc:@rekha_more64": "CV52",
+  "soc:@sameer_kapoor89": "CV61",
+  "fir:MUM/2026/0457:Sneha Kulkarni": "CV01",
+  "fir:MUM/2026/0457:Ramesh Yadav": "S1",
+  "fir:MUM/2026/0457:Sunny Kamble": "S2",
+  "fir:MUM/2026/0457:Imraan Shaikh": "L1",
+  "fir:HYD/2026/1182:Venkat Rao": "S3",
+  "fir:HYD/2026/1182:Kiran Goud": "S4",
+  "fir:HYD/2026/1182:Mahesh Naik": "C1",
+  "fir:HYD/2026/1182:Suresh Pilai": "L2",
+  "fir:KOL/2026/0733:Rahul Das": "M1",
+  "fir:KOL/2026/0733:Pinki Roy": "M2",
+  "fir:PUN/2026/0219:Prakash Jadhav": "CV05",
+  "fir:PUN/2026/0219:Ajay Shinde": "CV04",
+  "fir:DEL/2026/0904:Sunita Arora": "CV07",
+  "fir:DEL/2026/0904:Rohit Malhotra": "CV06"
+ },
+ "note": "Used only by the evaluation harness. The analysis engine never reads this file."
+}

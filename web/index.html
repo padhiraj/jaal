@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JAAL · Criminal Network Analyser</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="brand"><span class="logo">◈</span><div><b>JAAL</b><small>Joint Analytics for Adversarial Links</small></div></div>
+  <div class="search"><input id="q" placeholder="Search name, alias, phone…" autocomplete="off"><div id="qres" class="dropdown"></div></div>
+  <div class="right">
+    <span id="chain" class="badge" title="Audit hash-chain status">audit …</span>
+    <select id="user"></select>
+  </div>
+</header>
+<div id="rolebar"></div>
+<main>
+  <aside id="left">
+    <nav id="tabs">
+      <button data-tab="targets" class="on">Targets</button><button data-tab="alerts">Alerts</button>
+      <button data-tab="cases">Cases</button><button data-tab="links">Hidden links</button>
+      <button data-tab="er">Entity res.</button><button data-tab="ingest">Ingest</button><button data-tab="audit">Audit</button>
+    </nav>
+    <div id="panel"></div>
+  </aside>
+  <section id="center">
+    <div class="toolbar">
+      <div class="seg" id="viewseg"><button data-v="person" class="on">Person network</button><button data-v="kg">Knowledge graph</button></div>
+      <label>Colour <select id="colorby"><option value="role">Role</option><option value="community">Community</option><option value="city">City</option></select></label>
+      <label class="chk"><input type="checkbox" id="noi"> Network of interest only</label>
+      <button id="fit" class="ghost">Fit</button>
+      <span id="pathbox"></span>
+    </div>
+    <canvas id="graph"></canvas>
+    <div id="legend"></div>
+    <div id="tip"></div>
+    <div id="stats"></div>
+  </section>
+  <aside id="right"><div id="dossier"><div class="empty">Select a person in the graph or a target on the left to open their dossier.<br><br>Every score, link and alert is traceable to the source record — click any <span class="evlink">📄 evidence</span> chip.</div></div></aside>
+</main>
+<div id="modal" class="hidden"><div class="box"><div class="mhead"><b id="mtitle"></b><span id="mmeta"></span><button id="mclose">✕</button></div><pre id="mbody"></pre></div></div>
+<script src="app.js"></script>
+</body>
+</html>

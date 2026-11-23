@@ -1,0 +1,79 @@
+{
+  "er": {
+    "pairs_precision": 1.0,
+    "pairs_recall": 0.936,
+    "f1": 0.9669,
+    "records": 208,
+    "true_people": 78,
+    "entities": 82
+  },
+  "kingpin_rank": {
+    "jaal_priority": 2,
+    "degree_only": 42,
+    "betweenness_only": 3
+  },
+  "decoy_rank": {
+    "jaal_priority": 19,
+    "degree_only": 1
+  },
+  "precision_at_k": {
+    "k": 12,
+    "jaal": 0.833,
+    "degree_baseline": 0.167
+  },
+  "burners_attributed": [
+    "7004512390",
+    "7004598812"
+  ],
+  "cross_case_correct": "10/10",
+  "roles": {
+    "Venkat Rao": {
+      "true": "operative",
+      "predicted": "Field operative"
+    },
+    "Kiran Goud": {
+      "true": "operative",
+      "predicted": "Field operative"
+    },
+    "Mahesh Naik": {
+      "true": "courier",
+      "predicted": "Field operative"
+    },
+    "Suresh Pillai": {
+      "true": "lieutenant",
+      "predicted": "Broker / intermediary"
+    },
+    "Rahul Das": {
+      "true": "mule",
+      "predicted": "Money mule"
+    },
+    "Pinky Roy": {
+      "true": "mule",
+      "predicted": "Money mule"
+    },
+    "Ramesh Yadav": {
+      "true": "operative",
+      "predicted": "Field operative"
+    },
+    "Sunny Kamble": {
+      "true": "operative",
+      "predicted": "Field operative"
+    },
+    "Imran Sheikh": {
+      "true": "lieutenant",
+      "predicted": "Broker / intermediary"
+    },
+    "Anita Desai": {
+      "true": "financier",
+      "predicted": "Financial controller"
+    },
+    "Abdul Karim": {
+      "true": "mule",
+      "predicted": "Associate"
+    },
+    "Vikram Rathod": {
+      "true": "kingpin",
+      "predicted": "Suspected orchestrator"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+# Render Blueprint: New + > Blueprint > pick this repo, and Render creates the service from this file.
+services:
+  - type: web
+    name: jaal-demo
+    runtime: python
+    plan: free
+    buildCommand: echo "JAAL has no dependencies"
+    startCommand: python3 -u run.py --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/users
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7

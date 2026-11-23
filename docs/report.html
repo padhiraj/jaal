@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>JAAL — Project Report</title>
+<style>
+@page { size: A4; margin: 16mm 15mm 16mm 15mm; }
+body { font: 10.3pt/1.5 -apple-system, "Segoe UI", Inter, Helvetica, Arial, sans-serif; color: #17202e; margin: 0; }
+h1 { font-size: 30pt; margin: 0; letter-spacing: 4px; }
+h2 { font-size: 15pt; margin: 22px 0 8px; padding-bottom: 4px; border-bottom: 2px solid #0e7fc0; color: #0b3d63; page-break-after: avoid; }
+h3 { font-size: 11.5pt; margin: 14px 0 5px; color: #0b3d63; page-break-after: avoid; }
+p { margin: 5px 0 8px; }
+code, .mono { font-family: Menlo, Consolas, monospace; font-size: 8.8pt; background: #eef3f8; padding: 0 3px; border-radius: 3px; }
+pre { font: 8.6pt/1.45 Menlo, Consolas, monospace; background: #0f1724; color: #d7deea; padding: 10px 12px; border-radius: 6px; white-space: pre-wrap; page-break-inside: avoid; }
+table { width: 100%; border-collapse: collapse; margin: 6px 0 12px; font-size: 9.2pt; page-break-inside: avoid; }
+th, td { border: 1px solid #cfd8e3; padding: 4px 6px; text-align: left; vertical-align: top; }
+th { background: #e9f1f8; color: #0b3d63; }
+.cover { height: 255mm; display: flex; flex-direction: column; justify-content: center; page-break-after: always;
+  background: linear-gradient(160deg, #0b0f17 0%, #11243c 100%); color: #e8eef7; margin: -16mm -15mm 0; padding: 0 22mm; }
+.cover .logo { font-size: 46pt; color: #4cc3ff; }
+.cover .sub { font-size: 13pt; color: #8fb6d8; margin-top: 4px; letter-spacing: 1px; }
+.cover .tag { font-size: 16pt; margin-top: 26px; max-width: 150mm; line-height: 1.4; }
+.cover .meta { margin-top: 40px; color: #9fb0c8; font-size: 10pt; line-height: 1.8; }
+.cover .kpis { display: flex; gap: 14px; margin-top: 34px; }
+.cover .kpi { border: 1px solid #2a4a6e; border-radius: 8px; padding: 10px 14px; min-width: 34mm; }
+.cover .kpi b { display: block; font-size: 20pt; color: #4cc3ff; }
+.cover .kpi span { font-size: 8.5pt; color: #9fb0c8; }
+img.shot { width: 100%; border: 1px solid #c9d3df; border-radius: 6px; margin: 4px 0 2px; }
+.cap { font-size: 8.6pt; color: #5b6b80; margin: 0 0 12px; }
+.box { background: #f3f8fc; border-left: 4px solid #0e7fc0; padding: 8px 12px; margin: 8px 0 12px; border-radius: 0 6px 6px 0; page-break-inside: avoid; }
+.warn { background: #fff7e8; border-left-color: #e19b14; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.pb { page-break-before: always; }
+.formula { font-family: Menlo, Consolas, monospace; font-size: 9.2pt; background: #eef3f8; padding: 8px 10px; border-radius: 6px; page-break-inside: avoid; }
+ul { margin: 4px 0 8px; padding-left: 20px; } li { margin: 2px 0; }
+.ok { color: #0a8a55; font-weight: 600; } .no { color: #b3261e; font-weight: 600; }
+.toc li { margin: 3px 0; }
+</style></head><body>
+
+<section class="cover">
+  <div class="logo">◈</div>
+  <h1>JAAL</h1>
+  <div class="sub">Joint Analytics for Adversarial Links · AI-Powered Criminal Network Analysis System</div>
+  <div class="tag">A graph-based investigation platform that fuses FIRs, call records, bank data, vehicle sightings and social media into one explainable knowledge graph, and finds the people who run criminal networks while staying out of the paperwork.</div>
+  <div class="kpis">
+    <div class="kpi"><b>#2</b><span>rank of the hidden kingpin<br>(degree baseline: #42)</span></div>
+    <div class="kpi"><b>0.83</b><span>precision@12 for syndicate<br>(degree baseline: 0.17)</span></div>
+    <div class="kpi"><b>10/10</b><span>case pairs correctly<br>linked / separated</span></div>
+    <div class="kpi"><b>0.97</b><span>entity-resolution F1<br>(precision 1.00)</span></div>
+  </div>
+  <div class="meta">Project report & technical explanation · November 2026<br>
+  Stack: pure Python 3 standard library + vanilla JavaScript, with no third-party packages, so it runs on an air-gapped machine<br>
+  Problem statement: AI-Powered Criminal Network Analysis System (inspired by SIH26189)</div>
+</section>
+
+<h2>Contents</h2>
+<ol class="toc">
+<li>Problem and how JAAL answers it</li><li>What makes JAAL different</li><li>System architecture</li>
+<li>The demo dataset: "Operation Monsoon"</li><li>Multi-source ingestion</li><li>Entity resolution</li>
+<li>Knowledge graph construction</li><li>Network analytics: finding the people who matter</li><li>Behavioural and temporal pattern detection</li>
+<li>Cross-case linkage and hidden-link prediction</li><li>Explainability, audit trail and access control</li><li>The investigator's interface (walkthrough)</li>
+<li>Evaluation against ground truth</li><li>Requirement-by-requirement compliance</li><li>How to run, file map and tests</li><li>Limitations and roadmap</li>
+</ol>
+
+<h2>1. Problem and how JAAL answers it</h2>
+<p>Criminal syndicates are built to resist investigation. They use burner phones registered to fake identities, move money through mules and shell companies in amounts just below reporting thresholds, and keep the leader out of every FIR. The evidence that would expose them does exist, but it is split across FIRs in different states, telecom CDRs, bank statements, RTO and ANPR logs, and social media. Investigators cross-reference these by hand, so indirect links get missed and the leader rarely surfaces.</p>
+<p>JAAL ingests all of these sources, works out which records describe the same real person, builds a single knowledge graph, and runs graph algorithms and behavioural detectors on it. It then gives the investigator three things:</p>
+<ul>
+<li><b>A ranked list of priority targets</b> with a role for each (orchestrator, financial controller, broker, money mule, field operative, victim, benign hub).</li>
+<li><b>Alerts</b> for burner rotation, fake identities, structuring, pass-through mule accounts, money round-tripping, vehicle co-location, communication spikes and phones going dark.</li>
+<li><b>Cross-case links</b> showing which "unrelated" FIRs from different states belong to the same network, and through whom.</li>
+</ul>
+<p>Every number, link and alert can be clicked through to the exact line of the source document that supports it. Every access is written to a tamper-evident audit log.</p>
+
+<h2>2. What makes JAAL different</h2>
+<table>
+<tr><th style="width:28%">Typical approach</th><th>JAAL's approach</th></tr>
+<tr><td>Rank suspects by degree (number of contacts).</td><td>Degree rewards busy people, not important ones. In our data a delivery agent has the most contacts in the city. JAAL measures structure <i>around the case</i>: personalised PageRank from FIR-accused "seeds" defines a <b>network of interest</b>, and brokerage, influence and disruption are measured inside it. The kingpin moves from rank #42 (degree) to #2.</td></tr>
+<tr><td>Phone = person, as registered.</td><td><b>Handset forensics.</b> When a SIM registered to an identity that appears in no other source runs in the same handset (IMEI) as a known person's SIM, JAAL flags the registration as a probable fake identity and attributes the burner to the real user. It shows the CDR lines where the person slipped and put their own SIM in the burner handset.</td></tr>
+<tr><td>Black-box "risk score".</td><td>The score is the sum of five named parts with fixed, published weights. Each part has a one-line plain-language explanation and a rank, and each relationship links to its source rows.</td></tr>
+<tr><td>Treat every contact as suspicious.</td><td>Built-in <b>false-positive controls</b>: "benign hub" detection (many weak, mutually unconnected ties) and "probable unreported victim" detection (paid one accused once after a few calls). These are kept out of the suspect network and out of cross-case paths, so a shared courier or a shared victim does not merge two unrelated cases.</td></tr>
+<tr><td>Fully automatic record merging.</td><td>A human-in-the-loop entity-resolution queue. Confident merges (score ≥ 0.95) are automatic. Borderline pairs (0.65–0.95) wait for a supervisor's decision, which is stored and replayed on every rebuild.</td></tr>
+<tr><td>Logs as plain text files.</td><td>A SHA-256 <b>hash-chained</b> audit log. Editing or deleting any past entry is detected and pinpointed. Each source file's SHA-256 is recorded at ingestion as a chain-of-custody manifest.</td></tr>
+<tr><td>Heavy stack (Neo4j, Spark, cloud ML).</td><td>Zero dependencies. All algorithms (Brandes betweenness, weighted Dijkstra-Brandes, power-iteration eigenvector, personalised PageRank, Louvain, Adamic–Adar, Latora–Marchiori efficiency, bounded cycle search, Jaro–Winkler) are implemented from first principles. The system runs on a single police-station laptop with no internet, and an expert witness can reproduce every number.</td></tr>
+</table>
+
+<h2 class="pb">3. System architecture</h2>
+<svg viewBox="0 0 760 330" width="100%" style="font-family:-apple-system,Segoe UI,sans-serif;font-size:11px">
+ <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#0e7fc0"/></marker></defs>
+ <g fill="#e9f1f8" stroke="#0e7fc0">
+  <rect x="5" y="20" width="130" height="290" rx="8"/>
+ </g>
+ <text x="70" y="40" text-anchor="middle" font-weight="700" fill="#0b3d63">RAW SOURCES</text>
+ <g fill="#17202e"><text x="18" y="66">FIR text (5 states)</text><text x="18" y="92">Telecom subscriber reg.</text><text x="18" y="118">CDR + handset IMEI</text><text x="18" y="144">Bank KYC (+ shells)</text><text x="18" y="170">Fund transfers</text><text x="18" y="196">RTO registry</text><text x="18" y="222">ANPR camera hits</text><text x="18" y="248">Social media (OSINT)</text><text x="18" y="282" fill="#5b6b80">+ SHA-256 manifest</text></g>
+ <g fill="#fff" stroke="#0e7fc0" stroke-width="1.3">
+  <rect x="165" y="30" width="130" height="70" rx="8"/><rect x="165" y="125" width="130" height="70" rx="8"/><rect x="165" y="220" width="130" height="70" rx="8"/>
+  <rect x="325" y="78" width="140" height="70" rx="8"/><rect x="325" y="180" width="140" height="80" rx="8"/>
+  <rect x="495" y="30" width="125" height="62" rx="8"/><rect x="495" y="108" width="125" height="62" rx="8"/><rect x="495" y="186" width="125" height="62" rx="8"/><rect x="495" y="264" width="125" height="52" rx="8"/>
+  <rect x="650" y="60" width="105" height="200" rx="8"/>
+ </g>
+ <g text-anchor="middle" fill="#0b3d63" font-weight="700">
+  <text x="230" y="52">1. INGEST</text><text x="230" y="147">2. RESOLVE</text><text x="230" y="242">Human review</text>
+  <text x="395" y="100">3. KNOWLEDGE</text><text x="395" y="114">GRAPH</text><text x="395" y="202">4. PERSON</text><text x="395" y="216">PROJECTION</text>
+  <text x="557" y="52">5a. CENTRALITY</text><text x="557" y="130">5b. PATTERNS</text><text x="557" y="208">5c. CROSS-CASE</text><text x="557" y="284">6. AUDIT/RBAC</text>
+  <text x="702" y="84">7. UI + API</text>
+ </g>
+ <g text-anchor="middle" fill="#3a4a5e" font-size="9.5">
+  <text x="230" y="68">parsers, regex NER,</text><text x="230" y="82">provenance per record</text>
+  <text x="230" y="163">Indic-aware fuzzy</text><text x="230" y="177">matching + union-find</text>
+  <text x="230" y="258">0.65–0.95 queue,</text><text x="230" y="272">decisions replayed</text>
+  <text x="395" y="130">11 node types, 16 edge types</text>
+  <text x="395" y="232">people ↔ people via calls,</text><text x="395" y="245">money, co-location, social,</text><text x="395" y="258">co-accused</text>
+  <text x="557" y="68">PPR · NOI · betweenness</text><text x="557" y="81">eigenvector · disruption</text>
+  <text x="557" y="146">burners · structuring · mules</text><text x="557" y="159">cycles · spikes · dark</text>
+  <text x="557" y="224">paths + MO + TF-IDF</text><text x="557" y="237">Adamic–Adar links</text>
+  <text x="557" y="300">hash chain · masking</text>
+  <text x="702" y="106">targets & roles</text><text x="702" y="122">dossiers</text><text x="702" y="138">graph explorer</text><text x="702" y="154">path finder</text><text x="702" y="170">evidence viewer</text><text x="702" y="186">FIR ingest</text><text x="702" y="202">ER review</text><text x="702" y="218">audit trail</text>
+ </g>
+ <g stroke="#0e7fc0" stroke-width="1.4" fill="none" marker-end="url(#ar)">
+  <path d="M135 120 L163 70"/><path d="M230 100 L230 123"/><path d="M230 195 L230 218"/><path d="M295 160 L323 120"/>
+  <path d="M395 148 L395 178"/><path d="M465 210 L493 70"/><path d="M465 215 L493 140"/><path d="M465 220 L493 217"/><path d="M465 112 L493 290"/>
+  <path d="M620 61 L648 120"/><path d="M620 139 L648 150"/><path d="M620 217 L648 180"/><path d="M620 290 L648 230"/>
+ </g>
+</svg>
+<p class="cap">Figure 1. Processing pipeline. A full rebuild (ingestion through analytics) takes about 0.5 s for the demo data on a laptop, so every new FIR or review decision triggers a complete, consistent re-analysis instead of an incremental patch.</p>
+
+<table>
+<tr><th>Module</th><th>File</th><th>Responsibility</th></tr>
+<tr><td>Data generator</td><td><code>jaal/datagen.py</code></td><td>Seeded synthetic multi-source dataset with a planted syndicate, decoys, namesakes and messy formats; writes hidden ground truth for evaluation only.</td></tr>
+<tr><td>Ingestion</td><td><code>jaal/ingest.py</code></td><td>Parsers for FIR free text, CSVs and JSON; phone/vehicle normalisation; every record carries <code>(doc, line, snippet)</code> provenance; SHA-256 manifest.</td></tr>
+<tr><td>Entity resolution</td><td><code>jaal/resolve.py</code></td><td>Transliteration folding, Jaro–Winkler, evidence-weighted pair scoring, union-find, review queue.</td></tr>
+<tr><td>Algorithms</td><td><code>jaal/algorithms.py</code></td><td>All graph algorithms, dependency-free.</td></tr>
+<tr><td>Engine</td><td><code>jaal/engine.py</code></td><td>Knowledge graph, burner inference, person projection, scoring, roles, alerts, cross-case, link prediction, key-player set, evaluation.</td></tr>
+<tr><td>Audit &amp; RBAC</td><td><code>jaal/audit.py</code></td><td>Hash-chained log, verification, 4 roles, PII masking.</td></tr>
+<tr><td>Server</td><td><code>jaal/server.py</code></td><td>Threaded HTTP JSON API + static UI; permission check and audit entry on every request.</td></tr>
+<tr><td>Interface</td><td><code>web/*</code></td><td>Single-page app with its own canvas force-directed graph renderer (no CDN, works offline).</td></tr>
+</table>
+
+<h2 class="pb">4. The demo dataset: "Operation Monsoon"</h2>
+<p>Real investigative data cannot be published, and a demo is only convincing if the right answer is hidden and can be checked. JAAL therefore ships a <b>seeded generator</b> that plants a 12-person inter-state syndicate among 66 civilians over a 60-day window (1 Aug – 29 Sep 2026), then writes the data the way real agencies would hold it: split across systems, with inconsistent names and number formats.</p>
+<table>
+<tr><th>Role (hidden truth)</th><th>Person</th><th>How they appear in the data</th></tr>
+<tr><td><b>Kingpin</b></td><td>Vikram Rathod (Mumbai)</td><td>In <b>no FIR</b>. Talks to his lieutenants and financier only through two burner SIMs registered to fake identities ("Ramu Prasad", "Shankar Lal"), rotated on 1 Sep in the same handset. Twice put his own SIM into that handset. Receives "consultancy fees" from a shell company and has a second account under the spelling "Rathore".</td></tr>
+<tr><td>Lieutenants</td><td>Imran Sheikh (Mumbai), Suresh Pillai (Hyderabad)</td><td>Absconding in FIRs as "Imraan Shaikh @ Bhaijaan" and "Suresh Pilai"; each runs a city cell; never call each other directly.</td></tr>
+<tr><td>Financier</td><td>Anita Desai (Kolkata)</td><td>Signatory of shell firms "Desai Trading Co" and "Anaya Exports Pvt Ltd"; layering and round-tripping.</td></tr>
+<tr><td>Mules</td><td>Rahul Das, Pinky Roy, Abdul Karim</td><td>Receive victims' money and forward it in Rs 45,000–49,900 chunks.</td></tr>
+<tr><td>Operatives / courier</td><td>Ramesh Yadav, Sunny Kamble, Venkat Rao, Kiran Goud, Mahesh Naik</td><td>KYC-fraud callers (Mumbai); ganja seizure (Hyderabad); courier van co-located with the lieutenant's car at a highway toll at 2–3 a.m.</td></tr>
+</table>
+<p><b>Built-in traps:</b> a delivery agent who calls 32 people (the highest degree in the dataset); two different people named "Amit Kumar"; a wife sharing the kingpin's surname; nine victims who paid mule accounts but never filed complaints; two FIRs (Pune theft, Delhi assault) that have nothing to do with the syndicate; and 35% of civilians registered under initials ("R. MORE").</p>
+<table>
+<tr><th>Source</th><th>Volume</th><th>Source</th><th>Volume</th></tr>
+<tr><td>FIRs (free text)</td><td>5 (MUM, HYD, KOL, PUN, DEL)</td><td>Call Detail Records</td><td>6,342 calls</td></tr>
+<tr><td>Subscriber registry</td><td>80 SIMs</td><td>Bank KYC</td><td>81 accounts (2 companies)</td></tr>
+<tr><td>Fund transfers</td><td>460</td><td>RTO + ANPR</td><td>17 vehicles, 284 camera hits</td></tr>
+<tr><td>Social media</td><td>16 handles, 85 messages</td><td>Person records (all sources)</td><td>208 → 82 entities</td></tr>
+</table>
+
+<h2>5. Multi-source ingestion</h2>
+<p>Each parser turns one source into typed records and keeps exact provenance: document id, line number and the original text. That provenance is carried into every graph edge, alert and score, so nothing JAAL shows is detached from its evidence.</p>
+<ul>
+<li><b>FIR parser (unstructured text).</b> Regex-based extraction of FIR number, station, dates and sections. Complainant and accused lines become person records with aliases (<code>@</code>/<code>alias</code>), age, residence, phone and status (arrested / absconding / bailed). Phones, account numbers (<code>a/c</code>, <code>account no.</code>) and vehicle registrations (<code>AP 28 CX 9911</code>) are extracted from anywhere in the narrative. A modus-operandi lexicon tags each case (KYC-update pretext, OTP harvesting, structuring, narcotics, account renting, …).</li>
+<li><b>Normalisation.</b> <code>+91 98200 11457</code>, <code>09820011457</code>, <code>919820011457</code> and <code>98200-11457</code> all become <code>9820011457</code>. Vehicle numbers are reduced to alphanumerics.</li>
+<li><b>Structured sources</b> (subscriber registry, CDR with caller IMEI and cell id, KYC with company signatories, transfers, RTO, ANPR, social JSON) are parsed with their line numbers.</li>
+<li><b>Chain of custody.</b> The SHA-256 of every file is recorded at load time and shown in the UI, so a court can verify that the analysed file is the one seized.</li>
+<li><b>Live ingestion.</b> Analysts can paste a new FIR into the UI. It is parsed, saved alongside the other sources, and triggers a full rebuild and a report of new cross-case links (Section 12).</li>
+</ul>
+
+<h2 class="pb">6. Entity resolution</h2>
+<p>The same man appears as <i>Imran Sheikh</i> (telecom), <i>Md. Imran Sheikh</i> (bank), <i>Imran Shaikh</i> (RTO), <i>Imraan Shaikh @ Bhaijaan</i> (FIR) and <i>Imran S.</i> (social). JAAL resolves these in three steps.</p>
+<h3>6.1 Indic-aware name canonicalisation</h3>
+<p>Honorifics are stripped (Md, Mohd, Shri, Smt, …). Common transliteration variants are folded (<code>aa→a, ee→i, ai→e, ei→e, sh→s, kh→k, th→t, w→v, z→j, y→i</code>, doubled letters collapsed, trailing <i>e</i> dropped). Similarity is <code>0.4·JW(first) + 0.6·JW(last)</code>, where JW is Jaro–Winkler and an initial matches the full name (<i>R.</i> ≈ <i>Ritu</i>). "Shaikh"/"Sheikh", "Pilai"/"Pillai" and "Rathod"/"Rathore" therefore score highly. Single-token aliases ("Rammy", "Chinna") are compared against every token.</p>
+<h3>6.2 Evidence-weighted pair score</h3>
+<table>
+<tr><th>Evidence</th><th>Weight</th><th>Evidence</th><th>Weight</th></tr>
+<tr><td>Same government ID (PAN/Aadhaar, unmasked)</td><td>+1.00</td><td>Shared phone number</td><td>+0.45</td></tr>
+<tr><td>Same DOB / conflicting DOB</td><td>+0.35 / −0.50</td><td>Age consistent / age conflict (&gt;5 yrs)</td><td>+0.10 / −0.40</td></tr>
+<tr><td>Name similarity</td><td>+0.60 × sim</td><td>Same city</td><td>+0.10</td></tr>
+</table>
+<div class="formula">score ≥ 0.95 → automatic merge (union-find)      0.65 ≤ score &lt; 0.95 → supervisor review queue      else → separate</div>
+<p>Every merge stores its reasons, for example <i>"shared phone 9820011457 (+0.45) · name 'Imraan Shaikh' ~ 'IMRAN SHEIKH' sim 0.97 (+0.58) · age consistent (+0.10)"</i>. These reasons are shown in the dossier. Namesakes stay apart: the two "Amit Kumar" records score 0.6 + city mismatch, so they are not merged. Telecom registry rows are never merged directly with each other, because one SIM is one row.</p>
+<h3>6.3 Human in the loop</h3>
+<p>Borderline pairs, such as FIR alias "Rammy" vs. social handle "Rammy" (0.70) or "S. ARORA" vs. "Sunita Arora" (0.88), go to a queue with one entry per pair of resulting entities. Supervisors accept or reject a pair. The decision is persisted to <code>er_decisions.json</code>, logged in the audit trail, and replayed on every rebuild.</p>
+<p><b>Result:</b> 208 person records → 82 entities (78 real people). Pairwise precision <b>1.000</b>, recall <b>0.936</b>, F1 <b>0.967</b>. JAAL never wrongly merged two different people. The missed merges are exactly the borderline pairs it sent to human review.</p>
+
+<h2>7. Knowledge graph construction</h2>
+<p>The resolved data becomes one typed property graph: <b>295 nodes, 877 edges</b>.</p>
+<table>
+<tr><th>Node types (11)</th><td>Person · Phone · Account · Organisation · Vehicle · Case · Camera location · Social handle · Handset (IMEI) · Social group · Unattributed phone</td></tr>
+<tr><th>Edge types (16)</th><td>REGISTERED_TO · USES · INFERRED_USER · USED_IN (SIM↔IMEI) · CALLED · HOLDS · CONTROLS (person→company) · TRANSFERRED · OWNS · SEEN_AT · CO_LOCATED · OPERATES · MESSAGED · POSTED_IN · NAMED_IN (role, status) · MENTIONS (case→artefact)</td></tr>
+</table>
+<p>Each aggregated edge keeps its interaction count, totals (call seconds, rupees), first and last timestamps, and up to 25 evidence rows.</p>
+<h3>7.1 Burner and fake-identity inference</h3>
+<p>For every handset IMEI used by more than one SIM, JAAL checks the registered owners. If exactly one owner is a "real" identity (seen in more than one source) and another is a <b>single-source identity</b> (seen only in the telecom registry), the second is flagged as a probable fake and its SIM is attributed to the real person with confidence 0.85. The explanation cites the CDR lines where the person's own SIM ran in the burner handset. In the demo, both of the kingpin's burners are attributed correctly, and a <b>SIM-rotation</b> alert is raised: one SIM went silent on 31 Aug and the next started in the same handset on 1 Sep.</p>
+<h3>7.2 Person projection</h3>
+<p>For analysis, the graph is projected onto people: two people are linked if their phones called each other, their accounts (including companies they control) exchanged money, their vehicles were co-located, their handles messaged or posted in the same group, or they were co-accused in an FIR. Edge weight = calls + 3×transfers + 5×co-locations + messages + 4×co-accused. Each person-to-person edge records which channels support it and links back to the knowledge-graph edges and their source rows. Result: <b>81 people, 282 relationships, 8 Louvain communities (modularity 0.69)</b>.</p>
+
+<h2 class="pb">8. Network analytics: finding the people who matter</h2>
+<h3>8.1 Network of interest (NOI)</h3>
+<p>Centrality computed over a whole city's call graph mostly finds popular civilians. JAAL first asks <i>"who is close to the case?"</i> by running <b>personalised PageRank</b> with teleportation restricted to the 11 FIR-accused people ("suspicion diffusion"). Before ranking, two kinds of people are removed:</p>
+<ul>
+<li><b>Benign hubs:</b> degree ≥ max(8, 3× median), mean tie weight below the median tie, local clustering &lt; 0.15, and not accused. The delivery agent (32 contacts, average 6.9 calls per contact vs. a median of 25, clustering 0.12) is detected and excluded.</li>
+<li><b>Probable unreported victims:</b> paid ≥ Rs 50,000 to one accused person's account, at most twice, after ≤ 6 calls, with no money coming back and no company control. Nine victims are detected, including all six from the Mumbai KYC fraud wave, most of whom never filed a complaint.</li>
+</ul>
+<p>The NOI is the accused plus the top 30 by PageRank. It is then <b>expanded by alerts</b>: anyone with a severity-3 financial or telecom alert joins. In the demo this brings in the third mule, Abdul Karim, through his structuring alert.</p>
+<h3>8.2 Structural measures (inside the NOI)</h3>
+<ul>
+<li><b>Brokerage:</b> exact Brandes betweenness with Dijkstra on tie cost <code>1/(1+ln(1+w))</code>, so brokering strong, frequent ties counts more than incidental contact.</li>
+<li><b>Influence:</b> eigenvector centrality by power iteration on log-damped weights, so one very chatty pair cannot dominate.</li>
+<li><b>Disruption impact:</b> the drop in Latora–Marchiori global efficiency when the person is removed, keeping the original denominator so lost pairs count. This is the "whose arrest would most disrupt communication?" measure the problem statement asks for.</li>
+</ul>
+<h3>8.3 Priority score (fully decomposed)</h3>
+<div class="formula">priority = 0.25·CaseProximity(PPR) + 0.25·Brokerage + 0.15·Influence + 0.20·Disruption + 0.15·RedFlags<br>
+each term min-max normalised to [0,1];  RedFlags = min(1, Σ alert severities / 6)</div>
+<p>The dossier shows each term as a bar with its rank and a sentence, for example: <i>"Brokers 37.9% of strongest-tie paths inside the network of interest (rank #3)"</i>.</p>
+<h3>8.4 Role inference (rules, in order, each with a stated reason)</h3>
+<table>
+<tr><th>Role</th><th>Rule</th></tr>
+<tr><td>Victim / complainant</td><td>Named only as complainant.</td></tr>
+<tr><td>Probable victim (unreported)</td><td>Victim pattern from 8.1.</td></tr>
+<tr><td>Financial controller</td><td>Controls a company account and moves ≥ Rs 5 lakh.</td></tr>
+<tr><td><b>Suspected orchestrator</b></td><td>Priority rank ≤ 5, <b>never named as accused</b>, yet ≥ 3 accused within two hops ("insulated" leadership).</td></tr>
+<tr><td>Money mule</td><td>≥ Rs 2 lakh in from ≥ 2 sources, ≥ 60% forwarded.</td></tr>
+<tr><td>Broker / intermediary</td><td>Brokerage rank ≤ 8 and neighbours in ≥ 2 communities.</td></tr>
+<tr><td>Field operative / Associate / Benign hub / Peripheral</td><td>Accused; in NOI; hub pattern; otherwise.</td></tr>
+</table>
+<h3>8.5 Key-player set</h3>
+<p>A greedy search picks the three people whose <i>joint</i> removal most reduces the network's efficiency. This is a disruption plan, not just a list: removing Suresh Pillai, Anita Desai and Farah Gupta leaves 53% efficiency and splits the network into 5 fragments.</p>
+
+<h2>9. Behavioural and temporal pattern detection</h2>
+<table>
+<tr><th>Detector</th><th>Method</th><th>Found in demo</th></tr>
+<tr><td>Burner / ghost identity</td><td>Shared IMEI + single-source subscriber (7.1)</td><td>2 burners → Vikram Rathod</td></tr>
+<tr><td>SIM rotation</td><td>Heavy SIM stops, another starts in the same handset within 3 days</td><td>31 Aug → 1 Sep</td></tr>
+<tr><td>Structuring</td><td>≥ 3 transfers of Rs 45,000–49,999 from one account</td><td>All 3 mules</td></tr>
+<tr><td>Pass-through account</td><td>≥ Rs 2 lakh in from ≥ 2 sources, ≥ 70% out within 48 h</td><td>Mule + shell company</td></tr>
+<tr><td>Round-tripping</td><td>Bounded DFS for directed cycles (legs ≥ Rs 40k)</td><td>Desai Trading → Anaya Exports → Rathod → Desai Trading</td></tr>
+<tr><td>Communication spike</td><td>Robust z-score (median/MAD) on daily calls; severity raised if it precedes a case linked to the person's circle within 6 days</td><td>All 3 cells spike 2 days before their incidents</td></tr>
+<tr><td>Going dark</td><td>Active phone (≥ 2 calls/day, ≥ 15 days) silent ≥ 5 days before data end</td><td>Arrested operatives; retired burner</td></tr>
+<tr><td>Co-location</td><td>Two vehicles at the same ANPR camera within 10 min, ≥ 2 times</td><td>Courier van + lieutenant's car, Kurnool toll, 2–3 a.m.</td></tr>
+</table>
+
+<h2 class="pb">10. Cross-case linkage and hidden-link prediction</h2>
+<p>For each pair of FIRs, JAAL collects each case's people: accused, plus owners of phones, accounts and vehicles the FIR mentions (excluding complainants). It then scores the link from three signals:</p>
+<div class="formula">score = 0.75·Structural + 0.15·MO-overlap(Jaccard) + 0.10·Narrative TF-IDF cosine<br>
+Structural = 1/(hops+1) × ½ per intermediary outside the NOI × Π min(1, ln(1+w)/ln 11) per hop<br>
+strong ≥ 0.45 · moderate ≥ 0.25 · weak otherwise</div>
+<p>Paths may not pass through benign hubs or victims, and one-off ties (a single social message) are discounted. Results for the 5 base FIRs:</p>
+<table>
+<tr><th>Case pair</th><th>Strength</th><th>Why (as shown to the analyst)</th></tr>
+<tr><td>KOL/0733 ⇄ MUM/0457</td><td class="no">strong 0.80</td><td>Rahul Das appears in both: accused in Kolkata, and controls the account the Mumbai victim paid into.</td></tr>
+<tr><td>HYD/1182 ⇄ KOL/0733</td><td>moderate 0.36</td><td>Suresh Pillai ← transfers ×3 ← Anita Desai (who controls the shells named in the Kolkata FIR).</td></tr>
+<tr><td>HYD/1182 ⇄ MUM/0457</td><td>moderate 0.26</td><td>Suresh Pillai → Anita Desai → Imran Sheikh.</td></tr>
+<tr><td>All 7 pairs involving PUN/0219 or DEL/0904</td><td>weak ≤ 0.08</td><td>Only long civilian chains or single social messages connect them, so they are correctly left unlinked.</td></tr>
+</table>
+<p><b>Hidden-link prediction.</b> Adamic–Adar scoring inside the NOI suggests pairs with no direct record but many shared, rarely-shared contacts (for example "Imran Sheikh ⋯ Nisha Pawar: 3 shared contacts"). These are offered as leads for CDR or bank requisitions, not as facts.</p>
+
+<h2>11. Explainability, audit trail and access control</h2>
+<div class="grid2">
+<div class="box"><b>Traceable by construction.</b> Every record has <code>(doc, line, text)</code>. Every graph edge keeps its evidence rows. Every person-to-person link keeps the graph edges behind it. Every alert carries evidence. In the UI, each 📄 chip opens the original file at the exact line, highlighted, with the file's SHA-256. A test checks that no person-to-person link is missing its evidence.</div>
+<div class="box"><b>Tamper-evident audit.</b> Each API call (including <i>denied</i> ones) appends <code>{seq, ts, user, role, action, target, outcome, prev_hash}</code> and its SHA-256. <code>verify()</code> recomputes the chain and reports the first broken entry. The test suite edits entry #3 and confirms it is caught.</div>
+</div>
+<table>
+<tr><th>Role</th><th>Can</th><th>Cannot</th></tr>
+<tr><td>Viewer (field officer)</td><td>Network, targets, alerts, cases</td><td>Dossiers, documents. Phone, account, vehicle and IMEI identifiers are <b>masked</b> (<code>70XXXXXX90</code>); node ids become opaque stable tokens.</td></tr>
+<tr><td>Analyst</td><td>Everything above + dossiers, documents, path finder, FIR ingest, ER queue (read)</td><td>Decide ER pairs, read audit</td></tr>
+<tr><td>Supervisor</td><td>Everything + ER decisions, audit log, evaluation</td><td>—</td></tr>
+<tr><td>Auditor</td><td>Audit trail, chain verification, data manifest</td><td>Any case data</td></tr>
+</table>
+<p>Permissions are enforced on the server for every endpoint, not just hidden in the UI. Demo identities use tokens; in deployment these would come from the agency's SSO.</p>
+
+<h2 class="pb">12. The investigator's interface</h2>
+<img class="shot" src="shots/01_overview.png"><p class="cap">Figure 2. Main workspace: priority targets with role and score breakdown (left), the person network coloured by inferred role with node size = priority and dots on edges = money (centre). The hidden kingpin (red, centre) bridges the Mumbai cell (bottom) and the Hyderabad cell (top).</p>
+<img class="shot" src="shots/02_dossier.png"><p class="cap">Figure 3. Dossier for Vikram Rathod: "Suspected orchestrator — never named in any FIR, insulated behind 9 FIR-accused people within two hops". All three phones, including both burners, are attributed to him. Every score term is explained, and the timeline overlays calls and money with FIR dates.</p>
+<img class="shot" src="shots/03_path.png"><p class="cap">Figure 4. Path finder: a Mumbai field operative connects to a Hyderabad one only through Imran Sheikh → Vikram Rathod → Suresh Pillai. Every hop lists its channels and the CDR, transaction or FIR lines behind it.</p>
+<img class="shot" src="shots/04_alerts.png"><p class="cap">Figure 5. Behavioural alerts: burner attribution with the exact CDR rows, SIM rotation, structuring, pass-through accounts, round-tripping, spikes, phones going dark and co-location.</p>
+<img class="shot" src="shots/06_kg.png"><p class="cap">Figure 6. Knowledge-graph view two hops around the kingpin: his registered phone, the two burners (cyan) attributed through the shared handset, and two accounts.</p>
+<img class="shot" src="shots/10_doc.png"><p class="cap">Figure 7. Evidence viewer: clicking any 📄 chip opens the source document at the exact line, highlighted, with the file's SHA-256 for chain of custody.</p>
+<img class="shot" src="shots/05_cases.png"><p class="cap">Figure 8. Cross-case linkage: the Hyderabad narcotics case and the Mumbai cyber-fraud case are linked through the lieutenant and the financier, with shared modus-operandi tags. The Pune and Delhi cases stay weak.</p>
+<img class="shot" src="shots/12_ingest.png"><p class="cap">Figure 9. After ingesting a new FIR (Thane courier arrest naming only a handler called 'Seth' on phone 70045 98812), JAAL immediately links the new case <b>strongly</b> to Mumbai and moderately to Hyderabad and Kolkata. The number is one of Vikram Rathod's attributed burners, so the new FIR's 'Seth' is the kingpin.</p>
+<img class="shot" src="shots/07_er.png"><p class="cap">Figure 10. Entity-resolution review (supervisor): borderline pairs with the full scoring reasons and Same person / Different buttons; decisions are persisted and audited.</p>
+<div class="grid2"><div><img class="shot" src="shots/09_viewer.png"><p class="cap">Figure 11. Viewer role: identifiers masked, dossiers and documents denied.</p></div><div><img class="shot" src="shots/08_audit.png"><p class="cap">Figure 12. Auditor role: hash-chain verification and full access log, including denied attempts.</p></div></div>
+
+<h2 class="pb">13. Evaluation against ground truth</h2>
+<p>The generator writes <code>ground_truth.json</code>, which the engine never reads. <code>python3 run.py --evaluate</code> compares JAAL's output with it. The baselines are what a spreadsheet-based analyst would typically do: sort by number of contacts, or compute plain betweenness on the whole graph.</p>
+<table>
+<tr><th>Metric</th><th>JAAL</th><th>Baseline</th></tr>
+<tr><td>Rank of hidden kingpin (never in any FIR)</td><td class="ok">#2 of 81</td><td>#42 by degree</td></tr>
+<tr><td>Syndicate members in top 12 (precision@12)</td><td class="ok">10 / 12 = 0.83</td><td>2 / 12 = 0.17 by degree</td></tr>
+<tr><td>Rank of decoy delivery agent</td><td class="ok">#19 (flagged benign hub)</td><td>#1 by degree</td></tr>
+<tr><td>Burner SIMs attributed to the right person</td><td class="ok">2 / 2</td><td>0 (registered to fake names)</td></tr>
+<tr><td>Cross-case pairs correctly linked or separated</td><td class="ok">10 / 10</td><td>—</td></tr>
+<tr><td>Entity resolution (pairwise)</td><td class="ok">P 1.000 · R 0.936 · F1 0.967</td><td>—</td></tr>
+<tr><td>Roles: kingpin / financier / mules</td><td class="ok">Orchestrator / Financial controller / Money mule (2 of 3)</td><td>—</td></tr>
+<tr><td>Full rebuild time</td><td>≈ 0.5 s</td><td>weeks by hand</td></tr>
+</table>
+<div class="box warn"><b>Honest reading of these numbers.</b> The data is synthetic, and the generator and the detectors were written by the same team, so these results show the method works end to end and beats naïve baselines on a realistic scenario. They do not prove field accuracy. The top-ranked person is a lieutenant (Suresh Pillai), not the kingpin: he is a seed with four co-accused and real brokerage. The role engine still singles out Vikram Rathod as the only top-ranked person never named in an FIR. The third mule (Abdul Karim) is detected by alerts but classed as "Associate". Validation on historical, closed case files is the necessary next step.</div>
+
+<h2>14. Requirement-by-requirement compliance</h2>
+<table>
+<tr><th style="width:30%">Requirement</th><th>How JAAL meets it</th></tr>
+<tr><td>Multi-source ingestion & entity resolution</td><td>8 source types including unstructured FIR text; transliteration-aware fuzzy ER with explained scores, union-find, human review queue; burner / fake-identity resolution through handsets (§5–6, §7.1).</td></tr>
+<tr><td>Automated knowledge-graph construction</td><td>295-node, 877-edge typed graph with 11 node and 16 edge types, plus person projection; interactive graph explorer with knowledge-graph drill-down (§7, §12).</td></tr>
+<tr><td>Centrality & role detection</td><td>Betweenness (weighted Brandes), eigenvector, personalised PageRank, disruption impact (efficiency loss), key-player set; 10 explained roles including insulated orchestrator, financial controller and mule (§8).</td></tr>
+<tr><td>Cross-case & temporal patterns</td><td>Path + modus-operandi + TF-IDF case linkage with false-link controls; spikes before incidents, going dark, SIM rotation, structuring, round-tripping, co-location; live FIR ingestion re-links cases (§9–10).</td></tr>
+<tr><td>Explainable AI & audit trails, RBAC</td><td>Decomposed scores, rule-stated roles, line-level evidence for every link and alert, SHA-256 manifest, hash-chained audit with verification, 4 server-enforced roles with PII masking (§11).</td></tr>
+<tr><td>Expected impact: weeks → minutes</td><td>Full re-analysis in about 0.5 s; the hidden kingpin, both burners, all mules and the inter-state links surface without manual cross-referencing.</td></tr>
+</table>
+
+<h2 class="pb">15. How to run, file map and tests</h2>
+<pre>cd jaal
+python3 run.py                 # generates the demo data on first run, serves http://127.0.0.1:8765
+python3 run.py --evaluate      # scores JAAL against the hidden ground truth
+python3 run.py --regen         # regenerate the synthetic dataset
+python3 -m unittest discover -s tests -v     # 18 tests</pre>
+<p>Requirements: Python ≥ 3.9 and a modern browser. No pip installs and no internet access needed. Switch users with the selector at the top right to see role-based access: <i>Const. Patil (viewer)</i>, <i>SI Sharma (analyst)</i>, <i>DCP Rao (supervisor)</i>, <i>Auditor Iyer</i>. Try <b>Ingest → Load sample FIR → Ingest &amp; re-analyse</b> to watch a new case attach to the network.</p>
+<pre>jaal/
+├── run.py                  entry point (serve / evaluate / regen)
+├── jaal/
+│   ├── datagen.py          synthetic "Operation Monsoon" generator + ground truth
+│   ├── ingest.py           parsers, normalisers, FIR NER, provenance, SHA-256 manifest
+│   ├── resolve.py          entity resolution + review queue
+│   ├── algorithms.py       Brandes, PageRank/PPR, eigenvector, Louvain, efficiency, Adamic–Adar, cycles
+│   ├── engine.py           knowledge graph, analytics, alerts, roles, cross-case, evaluation
+│   ├── audit.py            hash-chained audit log, RBAC roles, PII masking
+│   └── server.py           HTTP JSON API + static files
+├── web/                    index.html · style.css · app.js (own canvas graph engine)
+├── tests/test_core.py      algorithm, ER, audit-tamper, masking and end-to-end tests
+├── data/raw/               generated sources (FIRs, CSVs, JSON, ground_truth.json)
+├── data/state/             audit.jsonl, er_decisions.json (created at runtime)
+└── docs/                   this report, screenshots, evaluation.json</pre>
+<p>API (all JSON, token in the <code>X-JAAL-Token</code> header): <code>/api/summary · /api/graph · /api/kg?focus= · /api/targets · /api/alerts · /api/cases · /api/links · /api/entity/{id} · /api/timeline/{id} · /api/path?a=&amp;b= · /api/doc/{doc} · /api/search?q= · /api/er/review · POST /api/er/decide · POST /api/ingest/fir · /api/audit · /api/audit/verify · /api/evaluate</code>.</p>
+
+<h2>16. Limitations and roadmap</h2>
+<ul>
+<li><b>Real-data validation.</b> Next step: back-test on closed, adjudicated case files, measure precision and recall of leads, and calibrate the weights with investigators.</li>
+<li><b>FIR NLP.</b> The regex extractor assumes an English FIR layout. Next: multilingual NER for Hindi and regional-language FIRs (for example a fine-tuned IndicBERT) with the same provenance spans.</li>
+<li><b>Scale.</b> Exact all-pairs algorithms are fine up to a few thousand people. For state-level data: sampled betweenness, a graph database (Neo4j / TigerGraph) backend and incremental updates.</li>
+<li><b>Temporal graph.</b> Today time is used in detectors. Next: sliding-window graphs to show how a network reorganises after each arrest.</li>
+<li><b>Security hardening.</b> SSO / two-factor login, purpose-of-access prompts tied to case numbers, field-level encryption, and anchoring the audit hash head in an external ledger.</li>
+<li><b>Legal safeguards.</b> Scores are leads, not evidence. The UI labels predicted links as leads, and every claim links to admissible source records. Deployment must follow the DPDP Act 2023 and the agencies' SOPs.</li>
+</ul>
+<p style="margin-top:20px;color:#5b6b80;font-size:9pt">All names, phone numbers, accounts, vehicles and cases in this report are fictional and machine-generated.</p>
+</body></html>
